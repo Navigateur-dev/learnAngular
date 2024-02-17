@@ -1,16 +1,22 @@
+import { CreditCardVerifier } from "../Services/creditCardVerifier";
+import { Formatter } from "../Services/formatter";
+
 export class CreditCardDirective{
     static selector = '[creditCard]';
 
-    constructor(public element: HTMLElement){}
+    constructor(
+        public element: HTMLElement, 
+        private formatter: Formatter, 
+        private verifier:CreditCardVerifier
+    ) {}
     formatCreditCardNumber(element: HTMLInputElement)
     {
-        const value = element.value.replace(/[^\d+]/g,'').substring(0,16);
-
-            const groups: string[] = [];
-            for(let i = 0; i <value.length; i+= 4){
-                groups.push(value.substring(i,i+4))
-            }
-            element.value = groups.join(' ');
+        element.value = this.formatter.formatNumber(
+            element.value, 
+            16, 
+            4, 
+            false
+        );
     }
     init(){
         this.element.style.borderColor = "blue";

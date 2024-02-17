@@ -1,13 +1,18 @@
+import { CreditCardVerifier } from "./Services/creditCardVerifier";
+import { Formatter } from "./Services/formatter";
 import { CreditCardDirective } from "./directives/creditCard.directive";
 import { PhoneNumberDirective } from "./directives/phoneNumber.directive";
+import { Angular } from "./framework/framework";
 
-const directives = [PhoneNumberDirective, CreditCardDirective];
+Angular.bootstrapApplication({
+    declarations: [PhoneNumberDirective, CreditCardDirective],
+    providers: [{
+        provide: "formatter",
+        construct: () => new Formatter("global"),
+    },
+    {
+        provide: "verifier",
+        construct: () => new CreditCardVerifier(),
+    },]
+});
 
-directives.forEach(directive => {
-    const elements = document.querySelectorAll<HTMLElement>(directive.selector);
-
-    elements.forEach(element => {
-        const directiveInstance = new directive(element);
-        directiveInstance.init();
-    });
-})

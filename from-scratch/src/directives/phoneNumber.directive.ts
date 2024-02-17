@@ -1,22 +1,30 @@
-export class PhoneNumberDirective{
+import { Formatter } from "../Services/formatter";
+
+export class PhoneNumberDirective {
 
     static selector = '[phoneNumber]';
-
+    static providers = [
+        {
+            provide: "formatter",
+            construct: () => new Formatter("spécifique"),
+        },
+    ]
     willHaveSpaces = true;
 
     borderColor = 'red';
 
-    constructor(public element: HTMLElement ){ }
+
+    constructor(public element: HTMLElement, private formatter: Formatter){ 
+    }
 
     formatPhoneNumber(element: HTMLInputElement)
     {
-        const value = element.value.replace(/[^\d+]/g,'').substring(0,10);
-
-            const groups: string[] = [];
-            for(let i = 0; i <value.length; i+= 2){
-                groups.push(value.substring(i,i+2))
-            }
-            element.value = groups.join(this.willHaveSpaces ? ' ' : '');
+        element.value = this.formatter.formatNumber(
+            element.value, 
+            10, 
+            2, 
+            this.willHaveSpaces
+        );
     }
 
     init(){
