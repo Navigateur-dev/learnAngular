@@ -1,5 +1,6 @@
 import { CreditCardDirective } from "../directives/creditCard.directive";
 import { PhoneNumberDirective } from "../directives/phoneNumber.directive";
+import { Module, ProvidersMetadata, ServiceInstances } from "./types";
 
 export class Framework{
     /**
@@ -9,16 +10,16 @@ export class Framework{
     /**
      * Tableau contenant les instances de services déjà construites
      */
-    services:{name: string; instance: any}[]=[];
+    services: ServiceInstances = [];
     /**
      * Tableau contenant les définitions de mes services 
      */
-    providers:{ provide: string; construct: Function }[]  = [];
+    providers: ProvidersMetadata = [];
     /**
      * Traitement d'instanciation de directives 
      * Greffe les éléments HTML ciblés par les selecteurs CSS
      */
-    bootstrapApplication(metadata: { providers?: any[]; declarations: any[] }){
+    bootstrapApplication(metadata: Module){
         this.providers = metadata.providers || [];
         this.directives = metadata.declarations;
 
